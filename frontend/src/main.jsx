@@ -385,7 +385,7 @@ function Footer({ onAdmin }) {
 
 function AdminPanel({ onGoHome }) {
   const [token, setToken] = useState(localStorage.getItem('voxing-token') || '');
-  const [email, setEmail] = useState('voxing444@gmail.com');
+  const [email, setEmail] = useState('alfredo31410_db_user');
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState('');
   const [courses, setCourses] = useState([]);
@@ -465,7 +465,7 @@ function AdminPanel({ onGoHome }) {
           <h1>Panel de administración</h1>
           <form onSubmit={login}>
             <label>
-              Correo
+              Usuario o correo
               <input value={email} onChange={(e) => setEmail(e.target.value)} />
             </label>
             <label>

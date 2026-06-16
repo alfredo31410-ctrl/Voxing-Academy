@@ -46,8 +46,8 @@ Backend: `http://localhost:4000/api`
 
 ## Acceso administrador
 
-Correo principal configurado: `voxing444@gmail.com`  
-Alias aceptado por si se usa el texto original con error: `voxing444@gmail.conm`
+Usuario principal configurado en `.env`: `ADMIN_EMAIL`  
+Alias opcional configurado en `.env`: `ADMIN_EMAIL_ALIAS`
 
 La contraseña está en `.env` para desarrollo. Antes de producción debe cambiarse junto con `JWT_SECRET`.
 
