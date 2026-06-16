@@ -27,6 +27,8 @@ export async function connectMongo() {
   }
 
   await mongoose.connect(config.mongoUri, {
-    dbName: 'voxing-academy'
+    dbName: 'voxing-academy',
+    serverSelectionTimeoutMS: 8000,
+    connectTimeoutMS: 8000
   });
 }
