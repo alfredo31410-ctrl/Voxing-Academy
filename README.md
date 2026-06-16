@@ -29,7 +29,13 @@ MONGODB_URI=mongodb+srv://USER:PASSWORD@CLUSTER.mongodb.net/voxing-academy
 npm run seed
 ```
 
-4. Correr frontend y backend:
+4. Validar MongoDB Atlas cuando `MONGODB_URI` ya esté configurado:
+
+```bash
+npm run check:mongo
+```
+
+5. Correr frontend y backend:
 
 ```bash
 npm run dev

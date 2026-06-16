@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node src/server.js",
     "start": "node src/server.js",
-    "seed": "node src/seed.js"
+    "seed": "node src/seed.js",
+    "check:mongo": "node src/checkMongo.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
