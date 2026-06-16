@@ -15,9 +15,9 @@ import {
   Mic,
   PenLine,
   Plane,
+  Play,
   Plus,
   Save,
-  Sparkles,
   Star,
   Users,
   X
@@ -28,43 +28,53 @@ import './styles.css';
 const API_URL = import.meta.env.DEV ? import.meta.env.VITE_API_URL || '/api' : '/api';
 
 const benefits = [
-  'Ruta clara desde cero hasta comunicación práctica.',
-  'Speaking Lab semanal para practicar sin presión.',
-  'Cursos cortos para resolver necesidades reales.',
-  'Comunidad privada, retos y acompañamiento.',
-  'Constancias por curso y certificado final.',
-  'Práctica con IA para estudiar entre sesiones.'
+  'Aprendes con frases reales, no con listas interminables.',
+  'Practicas desde el primer día aunque empieces desde cero.',
+  'Tienes ruta, comunidad y acompañamiento para no abandonar.',
+  'Conectas pronunciación, listening, gramática y conversación.',
+  'Puedes avanzar por cursos sueltos o por la membresía completa.',
+  'Usas contenido corto, retos y micro-lecciones para practicar diario.'
 ];
+
+const microLessons = [
+  {
+    tag: 'Frase base',
+    title: 'I am learning English.',
+    detail: 'Estoy aprendiendo inglés.',
+    note: 'Una primera frase útil para empezar sin miedo.'
+  },
+  {
+    tag: 'Error común',
+    title: "I'm hungry.",
+    detail: 'No digas: I have hunger.',
+    note: 'Aprende frases completas, no traducciones palabra por palabra.'
+  },
+  {
+    tag: 'Travel English',
+    title: 'Where is the bathroom?',
+    detail: '¿Dónde está el baño?',
+    note: 'Inglés práctico para resolver situaciones reales.'
+  }
+];
+
+const wordBank = ['Hello', 'Please', 'Thanks', 'Help', 'Water', 'Work', 'Today', 'Good'];
 
 const faqs = [
   {
     q: '¿Necesito saber inglés para empezar?',
-    a: 'No. La ruta inicia desde cero y está pensada para personas que sienten pena, miedo o confusión al hablar.'
-  },
-  {
-    q: '¿La membresía incluye todos los cursos?',
-    a: 'Sí. La membresía anual Voxing Plus contempla 12 cursos, Speaking Lab, comunidad y actualizaciones durante el año.'
+    a: 'No. Voxing está diseñado para principiantes que quieren perder la pena y construir confianza paso a paso.'
   },
   {
     q: '¿Puedo tomar solo un curso?',
-    a: 'Sí. Los cursos sueltos ayudan a resolver una necesidad puntual como viajes, pronunciación, trabajo o escritura.'
+    a: 'Sí. Puedes tomar cursos puntuales o avanzar con Voxing Plus, la ruta completa anual.'
   },
   {
-    q: '¿Habrá certificados?',
-    a: 'La estructura está preparada para constancias por curso y certificado Voxing al completar la ruta completa.'
-  }
-];
-
-const testimonials = [
-  {
-    quote: 'Sección lista para testimonios reales de alumnos Voxing.',
-    name: 'Próximamente',
-    role: 'Historias de avance'
+    q: '¿Qué hace diferente a Voxing?',
+    a: 'La metodología parte de frases reales, práctica guiada, micro-contenido, speaking y situaciones de vida diaria.'
   },
   {
-    quote: 'Aquí podremos integrar videos, reseñas y capturas cuando estén disponibles.',
-    name: 'Voxing Academy',
-    role: 'Comunidad'
+    q: '¿El panel ya permite administrar cursos?',
+    a: 'Sí. El admin permite crear, editar y eliminar cursos conectados a MongoDB Atlas.'
   }
 ];
 
@@ -99,7 +109,8 @@ function App() {
       <Header onAdmin={goAdmin} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       <main>
         <Hero />
-        <About />
+        <BrandIntro />
+        <MicroLearning />
         <Programs />
         <Methodology />
         <Benefits />
@@ -115,9 +126,9 @@ function App() {
 function Header({ onAdmin, menuOpen, setMenuOpen }) {
   const links = [
     ['Inicio', '#inicio'],
-    ['Sobre Voxing', '#sobre'],
+    ['Método', '#metodo'],
     ['Programas', '#programas'],
-    ['Metodología', '#metodologia'],
+    ['Ruta', '#ruta'],
     ['FAQ', '#faq'],
     ['Contacto', '#contacto']
   ];
@@ -125,7 +136,7 @@ function Header({ onAdmin, menuOpen, setMenuOpen }) {
   return (
     <header className="header">
       <a className="brand" href="#inicio" aria-label="Voxing Academy inicio">
-        <img src="/images/voxing-logo-cropped.png" alt="Voxing Academy" />
+        <img src="/brand/voxing-logo-color.png" alt="Voxing Academy" />
       </a>
       <button className="icon-button mobile-only" onClick={() => setMenuOpen(!menuOpen)} aria-label="Abrir menú">
         {menuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -153,55 +164,104 @@ function Hero() {
   return (
     <section className="hero" id="inicio">
       <div className="hero-copy">
+        <img className="hero-logo" src="/brand/voxing-logo-color.png" alt="Voxing Academy" />
         <p className="eyebrow">English that sounds like you</p>
-        <h1>Aprende inglés con una ruta clara para hablar con más seguridad.</h1>
+        <h1>Inglés práctico para hablar con confianza desde tu vida real.</h1>
         <p className="hero-lede">
-          Voxing Academy acompaña tu avance desde tu nivel actual hasta usar inglés en trabajo, viajes,
-          estudio y vida diaria con práctica real, sesiones en vivo y una metodología humana.
+          Voxing Academy convierte el inglés en práctica clara: frases útiles, speaking guiado,
+          micro-lecciones, retos y una ruta para avanzar sin pena.
         </p>
         <div className="hero-actions">
           <a className="primary-button large" href="#contacto">
             Quiero empezar
             <ArrowRight size={18} />
           </a>
-          <a className="secondary-button large" href="#programas">
-            Ver programas
+          <a className="secondary-button large" href="#metodo">
+            Ver método
+            <Play size={17} />
           </a>
         </div>
         <div className="trust-row" aria-label="Beneficios principales">
           <span><Mic size={16} /> Speaking Lab</span>
-          <span><GraduationCap size={16} /> Certificado final</span>
-          <span><Sparkles size={16} /> Práctica con IA</span>
+          <span><BookOpenCheck size={16} /> Frases reales</span>
+          <span><GraduationCap size={16} /> Ruta completa</span>
         </div>
       </div>
-      <div className="hero-media" aria-label="Alumnos practicando inglés">
-        <img src="/images/voxing-hero.png" alt="Grupo de estudiantes practicando conversación en inglés" />
-        <div className="hero-stat">
-          <strong>12 cursos</strong>
-          <span>de cero a confianza</span>
+      <div className="hero-board" aria-label="Micro lecciones Voxing">
+        <div className="lesson-phone">
+          <div className="phone-top">
+            <span></span>
+            <strong>Daily English</strong>
+          </div>
+          <div className="lesson-bubble main">
+            <small>Today&apos;s phrase</small>
+            <strong>I need help, please.</strong>
+            <span>Necesito ayuda, por favor.</span>
+          </div>
+          <div className="lesson-bubble">
+            <small>Mini challenge</small>
+            <strong>I am a student.</strong>
+            <span>Correct answer: B</span>
+          </div>
+          <div className="audio-row">
+            <Mic size={18} />
+            <div>
+              <strong>Repeat out loud</strong>
+              <span>3 times today</span>
+            </div>
+          </div>
+        </div>
+        <div className="floating-word">Hello</div>
+        <div className="floating-card">
+          <strong>20 palabras base</strong>
+          <span>5 al día. Sin correr. Solo empezar.</span>
         </div>
       </div>
     </section>
   );
 }
 
-function About() {
+function BrandIntro() {
   return (
-    <section className="section split" id="sobre">
-      <div>
-        <p className="section-kicker">Sobre Voxing Academy</p>
-        <h2>Una academia para avanzar sin pena, sin presión y sin estudiar a ciegas.</h2>
+    <section className="brand-section" id="metodo">
+      <div className="brand-mark">
+        <img src="/brand/voxing-logo-white.png" alt="Voxing Academy" />
       </div>
-      <div className="rich-copy">
+      <div>
+        <p className="section-kicker">Nueva identidad Voxing</p>
+        <h2>Una academia con voz propia: cercana, clara y enfocada en comunicación.</h2>
+      </div>
+      <div className="rich-copy light">
         <p>
-          Voxing Academy no enseña inglés como una lista interminable de reglas. Su propuesta es una ruta
-          progresiva y visual donde cada alumno entiende qué practicar, cómo medir su avance y cómo usar el
-          idioma en situaciones reales.
+          La marca gira alrededor de conversación: el globo de diálogo, los puntos de habla y el contraste
+          navy/teal. La experiencia del sitio ahora refleja esa personalidad: directa, visual y fácil de seguir.
         </p>
-        <p>
-          La marca combina cursos grabados, práctica en vivo, comunidad y herramientas modernas para que el
-          aprendizaje se sienta acompañado, flexible y aplicable.
-        </p>
+      </div>
+    </section>
+  );
+}
+
+function MicroLearning() {
+  return (
+    <section className="section micro-section">
+      <div className="section-heading">
+        <p className="section-kicker">Contenido que enseña</p>
+        <h2>Micro-lecciones para que el inglés se vuelva parte de tu día.</h2>
+      </div>
+      <div className="micro-grid">
+        {microLessons.map((lesson) => (
+          <article className="micro-card" key={lesson.title}>
+            <span>{lesson.tag}</span>
+            <h3>{lesson.title}</h3>
+            <p>{lesson.detail}</p>
+            <small>{lesson.note}</small>
+          </article>
+        ))}
+      </div>
+      <div className="word-bank" aria-label="Palabras básicas">
+        {wordBank.map((word) => (
+          <span key={word}>{word}</span>
+        ))}
       </div>
     </section>
   );
@@ -213,10 +273,10 @@ function Programs() {
   return (
     <section className="section" id="programas">
       <div className="section-heading">
-        <p className="section-kicker">Programas y cursos</p>
-        <h2>El ecosistema Voxing está diseñado para necesidades reales.</h2>
+        <p className="section-kicker">Programas</p>
+        <h2>De frases simples a conversaciones reales.</h2>
         <p>
-          Empieza con una clase gratuita, toma un curso puntual o avanza con la membresía completa Voxing Plus.
+          El ecosistema Voxing se organiza en cursos puntuales y una ruta completa para avanzar todo el año.
         </p>
       </div>
 
@@ -251,10 +311,10 @@ function Programs() {
 
 function Methodology() {
   return (
-    <section className="section method-section" id="metodologia">
+    <section className="section path-section" id="ruta">
       <div className="section-heading">
-        <p className="section-kicker">Metodología</p>
-        <h2>Una ruta por fases para convertir estudio en comunicación.</h2>
+        <p className="section-kicker">Ruta Voxing</p>
+        <h2>Aprende en fases visibles, no en una biblioteca desordenada.</h2>
       </div>
       <div className="path-grid">
         {learningPath.map((step, index) => (
@@ -282,7 +342,7 @@ function Benefits() {
     <section className="section benefits-section">
       <div className="section-heading">
         <p className="section-kicker">Beneficios</p>
-        <h2>Aprender con Voxing se siente claro, útil y acompañado.</h2>
+        <h2>Un sistema de aprendizaje amable, repetible y accionable.</h2>
       </div>
       <div className="benefit-grid">
         {benefits.map((benefit) => (
@@ -298,21 +358,20 @@ function Benefits() {
 
 function Testimonials() {
   return (
-    <section className="section" aria-label="Testimonios">
+    <section className="section proof-section" aria-label="Testimonios">
       <div className="section-heading">
-        <p className="section-kicker">Testimonios</p>
-        <h2>Historias de avance listas para integrarse.</h2>
+        <p className="section-kicker">Historias</p>
+        <h2>Espacio listo para testimonios, videos y avances reales.</h2>
       </div>
-      <div className="testimonial-grid">
-        {testimonials.map((item) => (
-          <figure className="testimonial-card" key={item.name}>
-            <blockquote>“{item.quote}”</blockquote>
-            <figcaption>
-              <strong>{item.name}</strong>
-              <span>{item.role}</span>
-            </figcaption>
-          </figure>
-        ))}
+      <div className="proof-grid">
+        <figure className="proof-card">
+          <blockquote>“Antes me daba pena hablar. Ahora practico frases cortas todos los días.”</blockquote>
+          <figcaption>Alumno Voxing · Próximamente</figcaption>
+        </figure>
+        <figure className="proof-card dark">
+          <blockquote>“No necesitas hablar perfecto para empezar. Necesitas una ruta clara.”</blockquote>
+          <figcaption>Voxing Academy</figcaption>
+        </figure>
       </div>
     </section>
   );
@@ -346,9 +405,9 @@ function Contact() {
     <section className="contact-section" id="contacto">
       <div>
         <p className="section-kicker">Contacto</p>
-        <h2>Empieza con una ruta que sí puedas seguir.</h2>
+        <h2>Empieza con una frase. Avanza con una ruta.</h2>
         <p>
-          La web queda preparada para integrar WhatsApp, formularios, campañas, pagos y landings específicas.
+          La web queda preparada para WhatsApp, formularios, campañas, pagos, landings específicas y contenido real.
         </p>
       </div>
       <form className="contact-form">
@@ -361,7 +420,7 @@ function Contact() {
           <input placeholder="tu@email.com" />
         </label>
         <label>
-          ¿Qué quieres lograr?
+          ¿Qué quieres lograr con tu inglés?
           <textarea placeholder="Quiero aprender inglés para..." />
         </label>
         <button className="primary-button large" type="button">
@@ -376,8 +435,8 @@ function Contact() {
 function Footer({ onAdmin }) {
   return (
     <footer className="footer">
-      <img src="/images/voxing-logo-cropped.png" alt="Voxing Academy" />
-      <p>Voxing Academy. English that sounds like you.</p>
+      <img src="/brand/voxing-logo-color.png" alt="Voxing Academy" />
+      <p>English that sounds like you.</p>
       <button className="text-button" onClick={onAdmin}>Administrador</button>
     </footer>
   );
@@ -461,7 +520,7 @@ function AdminPanel({ onGoHome }) {
     return (
       <main className="admin-shell">
         <section className="login-panel">
-          <img src="/images/voxing-logo-cropped.png" alt="Voxing Academy" />
+          <img src="/brand/voxing-logo-color.png" alt="Voxing Academy" />
           <h1>Panel de administración</h1>
           <form onSubmit={login}>
             <label>
@@ -487,7 +546,7 @@ function AdminPanel({ onGoHome }) {
   return (
     <main className="admin-dashboard">
       <aside className="admin-sidebar">
-        <img src="/images/voxing-logo-cropped.png" alt="Voxing Academy" />
+        <img src="/brand/voxing-logo-color.png" alt="Voxing Academy" />
         <button className="secondary-button" onClick={() => setEditing(emptyCourse)}>
           <Plus size={16} />
           Nuevo curso
