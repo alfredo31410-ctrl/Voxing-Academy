@@ -81,9 +81,11 @@ Panel: `http://localhost:5173/admin`
 
 1. Importar el repositorio.
 2. Root directory: `frontend`
-3. Build command: `npm run build`
-4. Output directory: `dist`
-5. Variable:
+3. Install command: `npm install`
+4. Build command: `npm run build`
+5. Output directory: `dist`
+6. Si Vercel muestra `npm run build --workspace frontend`, cambiarlo manualmente a `npm run build` porque ese comando solo funciona desde la raíz del monorepo.
+7. Variable:
    - `VITE_API_URL=https://tu-backend.up.railway.app/api`
 
 ## Próximos módulos preparados
