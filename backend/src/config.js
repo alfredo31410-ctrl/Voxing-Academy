@@ -10,5 +10,10 @@ export const config = {
   adminEmail: (process.env.ADMIN_EMAIL || 'voxing444@gmail.com').toLowerCase(),
   adminEmailAlias: (process.env.ADMIN_EMAIL_ALIAS || 'voxing444@gmail.conm').toLowerCase(),
   adminPassword: process.env.ADMIN_PASSWORD || 'Mariel250900',
-  frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173'
+  frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
+  allowedOrigins: [
+    process.env.FRONTEND_URL || 'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'http://localhost:5173'
+  ]
 };

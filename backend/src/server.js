@@ -9,7 +9,18 @@ await connectDatabase();
 
 const app = express();
 
-app.use(cors({ origin: config.frontendUrl, credentials: true }));
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || config.allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(new Error(`Origin not allowed by CORS: ${origin}`));
+    },
+    credentials: true
+  })
+);
 app.use(express.json());
 
 app.get('/api/health', (_req, res) => {
