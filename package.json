@@ -1,0 +1,20 @@
+{
+  "name": "voxing-academy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sitio principal y panel administrativo de Voxing Academy.",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace backend\" \"npm run dev --workspace frontend\"",
+    "build": "npm run build --workspace frontend",
+    "start": "npm run start --workspace backend",
+    "lint": "npm run lint --workspace frontend",
+    "seed": "npm run seed --workspace backend"
+  },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
