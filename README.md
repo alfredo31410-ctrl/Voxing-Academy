@@ -44,6 +44,8 @@ npm run dev
 Frontend: `http://localhost:5173`  
 Backend: `http://localhost:4000/api`
 
+Si el navegador muestra `ERR_CONNECTION_REFUSED` en `/api/auth/login`, significa que el frontend está abierto pero el backend no está corriendo en `http://127.0.0.1:4000`. Cierra terminales duplicadas y vuelve a correr `npm run dev` desde la raíz del proyecto.
+
 ## Acceso administrador
 
 Usuario principal configurado en `.env`: `ADMIN_EMAIL`  

@@ -31,6 +31,14 @@ const leadHref = WHATSAPP_URL || '#clase-gratis';
 const leadTarget = WHATSAPP_URL ? '_blank' : undefined;
 const leadRel = WHATSAPP_URL ? 'noreferrer' : undefined;
 
+function formatApiError(error, fallback = 'No se pudo conectar con el servidor.') {
+  if (error instanceof TypeError) {
+    return 'No se pudo conectar con la API local. Revisa que el backend esté corriendo en http://127.0.0.1:4000.';
+  }
+
+  return error.message || fallback;
+}
+
 const benefits = [
   'Aprendes con frases reales, no con listas interminables.',
   'Practicas desde el primer día aunque empieces desde cero.',
@@ -504,7 +512,7 @@ function AdminPanel({ onGoHome }) {
 
   useEffect(() => {
     if (token) {
-      fetchCourses(token).then(setCourses).catch(() => setStatus('No se pudieron cargar cursos.'));
+      fetchCourses(token).then(setCourses).catch((error) => setStatus(formatApiError(error, 'No se pudieron cargar cursos.')));
     }
   }, [token]);
 
@@ -517,45 +525,53 @@ function AdminPanel({ onGoHome }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-      if (!response.ok) throw new Error('Credenciales inválidas');
+      if (!response.ok) throw new Error('Credenciales inválidas.');
       const data = await response.json();
       localStorage.setItem('voxing-token', data.token);
       setToken(data.token);
       setStatus('Acceso validado correctamente.');
     } catch (error) {
-      setStatus(error.message);
+      setStatus(formatApiError(error, 'No se pudo validar el acceso.'));
     }
   }
 
   async function saveCourse(event) {
     event.preventDefault();
     setStatus('Guardando curso...');
-    const method = editing?._id ? 'PUT' : 'POST';
-    const url = editing?._id ? `${API_URL}/courses/${editing._id}` : `${API_URL}/courses`;
-    const response = await fetch(url, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify(editing)
-    });
-    if (!response.ok) {
-      setStatus('No se pudo guardar el curso.');
-      return;
+    try {
+      const method = editing?._id ? 'PUT' : 'POST';
+      const url = editing?._id ? `${API_URL}/courses/${editing._id}` : `${API_URL}/courses`;
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(editing)
+      });
+      if (!response.ok) {
+        setStatus('No se pudo guardar el curso.');
+        return;
+      }
+      setCourses(await fetchCourses(token));
+      setEditing(null);
+      setStatus('Curso guardado.');
+    } catch (error) {
+      setStatus(formatApiError(error, 'No se pudo guardar el curso.'));
     }
-    setCourses(await fetchCourses(token));
-    setEditing(null);
-    setStatus('Curso guardado.');
   }
 
   async function removeCourse(id) {
-    await fetch(`${API_URL}/courses/${id}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    setCourses(await fetchCourses(token));
-    setStatus('Curso eliminado.');
+    try {
+      await fetch(`${API_URL}/courses/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setCourses(await fetchCourses(token));
+      setStatus('Curso eliminado.');
+    } catch (error) {
+      setStatus(formatApiError(error, 'No se pudo eliminar el curso.'));
+    }
   }
 
   if (!token) {
