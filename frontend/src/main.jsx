@@ -26,6 +26,10 @@ import { initialCourses, learningPath } from './data/courses';
 import './styles.css';
 
 const API_URL = '/api';
+const WHATSAPP_URL = import.meta.env.VITE_WHATSAPP_URL || '';
+const leadHref = WHATSAPP_URL || '#clase-gratis';
+const leadTarget = WHATSAPP_URL ? '_blank' : undefined;
+const leadRel = WHATSAPP_URL ? 'noreferrer' : undefined;
 
 const benefits = [
   'Aprendes con frases reales, no con listas interminables.',
@@ -111,6 +115,7 @@ function App() {
         <Hero />
         <BrandIntro />
         <MicroLearning />
+        <FreeClass />
         <Programs />
         <Methodology />
         <Benefits />
@@ -151,8 +156,8 @@ function Header({ onAdmin, menuOpen, setMenuOpen }) {
           <Lock size={16} />
           Admin
         </button>
-        <a className="primary-button nav-cta" href="#contacto">
-          Pedir informes
+        <a className="primary-button nav-cta" href="#clase-gratis">
+          Clase gratis
           <ArrowRight size={17} />
         </a>
       </nav>
@@ -172,8 +177,8 @@ function Hero() {
           micro-lecciones, retos y una ruta para avanzar sin pena.
         </p>
         <div className="hero-actions">
-          <a className="primary-button large" href="#contacto">
-            Quiero empezar
+          <a className="primary-button large" href={leadHref} target={leadTarget} rel={leadRel}>
+            Agendar clase gratis
             <ArrowRight size={18} />
           </a>
           <a className="secondary-button large" href="#metodo">
@@ -262,6 +267,38 @@ function MicroLearning() {
         {wordBank.map((word) => (
           <span key={word}>{word}</span>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function FreeClass() {
+  return (
+    <section className="free-class-section" id="clase-gratis">
+      <div className="free-class-grid">
+        <div>
+          <p className="section-kicker">Primer paso</p>
+          <h2>Agenda una clase gratis y descubre desde dónde empezar.</h2>
+          <p>
+            Voxing no te mete a una ruta genérica. Primero entendemos tu nivel, tu objetivo y la razón por la que
+            quieres hablar inglés con más seguridad.
+          </p>
+          <div className="free-class-actions">
+            <a className="primary-button large" href={leadHref} target={leadTarget} rel={leadRel}>
+              Quiero mi clase gratis
+              <MessageCircle size={18} />
+            </a>
+            <span>Diagnóstico inicial, recomendación de ruta y próximos pasos.</span>
+          </div>
+        </div>
+        <div className="free-class-panel" aria-label="Qué incluye la clase gratis">
+          <strong>Tu sesión inicial incluye</strong>
+          <ul>
+            <li><Check size={16} /> Revisión rápida de nivel y confianza al hablar.</li>
+            <li><Check size={16} /> Objetivo principal: estudio, trabajo, viaje o crecimiento profesional.</li>
+            <li><Check size={16} /> Recomendación del programa ideal dentro del ecosistema Voxing.</li>
+          </ul>
+        </div>
       </div>
     </section>
   );
@@ -372,6 +409,10 @@ function Testimonials() {
           <blockquote>“No necesitas hablar perfecto para empezar. Necesitas una ruta clara.”</blockquote>
           <figcaption>Voxing Academy</figcaption>
         </figure>
+        <figure className="proof-card">
+          <blockquote>“Quiero inglés para trabajar, viajar y responder sin quedarme en blanco.”</blockquote>
+          <figcaption>Perfil de alumno ideal · En validación</figcaption>
+        </figure>
       </div>
     </section>
   );
@@ -407,7 +448,8 @@ function Contact() {
         <p className="section-kicker">Contacto</p>
         <h2>Empieza con una frase. Avanza con una ruta.</h2>
         <p>
-          La web queda preparada para WhatsApp, formularios, campañas, pagos, landings específicas y contenido real.
+          Cuéntanos tu objetivo y te orientamos con la ruta Voxing adecuada. El botón puede conectarse a WhatsApp
+          en producción con la variable VITE_WHATSAPP_URL.
         </p>
       </div>
       <form className="contact-form">
@@ -423,10 +465,10 @@ function Contact() {
           ¿Qué quieres lograr con tu inglés?
           <textarea placeholder="Quiero aprender inglés para..." />
         </label>
-        <button className="primary-button large" type="button">
+        <a className="primary-button large" href={leadHref} target={leadTarget} rel={leadRel}>
           Solicitar informes
           <MessageCircle size={18} />
-        </button>
+        </a>
       </form>
     </section>
   );

@@ -87,6 +87,9 @@ Panel: `http://localhost:5173/admin`
 6. Si Vercel muestra `npm run build --workspace frontend`, cambiarlo manualmente a `npm run build` porque ese comando solo funciona desde la raíz del monorepo.
 7. Variable:
    - `VITE_API_URL=https://tu-backend.up.railway.app/api`
+   - `VITE_WHATSAPP_URL=https://wa.me/521XXXXXXXXXX`
+
+`VITE_WHATSAPP_URL` es opcional. Si no existe, los botones de clase gratis e informes apuntan a la sección interna de contacto.
 
 ## Próximos módulos preparados
 

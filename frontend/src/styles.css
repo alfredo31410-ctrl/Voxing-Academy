@@ -478,6 +478,86 @@ h3 {
   padding: 10px 14px;
 }
 
+.free-class-section {
+  background: var(--paper);
+  padding: clamp(52px, 7vw, 86px) clamp(20px, 5vw, 72px);
+}
+
+.free-class-grid {
+  align-items: center;
+  background:
+    linear-gradient(135deg, rgba(232, 251, 251, 0.92), rgba(255, 255, 255, 0.98)),
+    var(--mint);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: clamp(24px, 4vw, 54px);
+  grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.72fr);
+  padding: clamp(26px, 5vw, 54px);
+}
+
+.free-class-grid h2 {
+  max-width: 780px;
+}
+
+.free-class-grid p {
+  color: var(--muted);
+  font-size: clamp(1rem, 1.35vw, 1.14rem);
+  line-height: 1.7;
+  max-width: 760px;
+}
+
+.free-class-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.free-class-actions span {
+  color: var(--navy);
+  font-weight: 850;
+  line-height: 1.45;
+  max-width: 360px;
+}
+
+.free-class-panel {
+  background: var(--navy);
+  border-radius: 8px;
+  color: #fff;
+  padding: 24px;
+}
+
+.free-class-panel strong {
+  display: block;
+  font-size: 1.2rem;
+  margin-bottom: 18px;
+}
+
+.free-class-panel ul {
+  display: grid;
+  gap: 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.free-class-panel li {
+  align-items: flex-start;
+  color: #d2ecf0;
+  display: flex;
+  gap: 9px;
+  line-height: 1.5;
+}
+
+.free-class-panel svg {
+  color: var(--teal);
+  flex: 0 0 auto;
+  margin-top: 3px;
+}
+
 .offer-band {
   align-items: center;
   background: var(--navy);
@@ -632,7 +712,7 @@ h3 {
 }
 
 .proof-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-top: 30px;
 }
 
@@ -879,6 +959,7 @@ textarea {
   .hero,
   .brand-section,
   .contact-section,
+  .free-class-grid,
   .offer-band {
     grid-template-columns: 1fr;
   }
@@ -890,6 +971,7 @@ textarea {
   .course-grid,
   .path-grid,
   .admin-grid,
+  .proof-grid,
   .micro-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -981,6 +1063,7 @@ textarea {
 
   .hero-actions .primary-button,
   .hero-actions .secondary-button,
+  .free-class-actions .primary-button,
   .contact-form .primary-button {
     width: 100%;
   }
