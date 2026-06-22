@@ -7,13 +7,22 @@ export default function handler(req, res) {
     return;
   }
 
-  const email = String(req.body?.email || '').toLowerCase().trim();
-  const password = String(req.body?.password || '');
-  const validEmail = email === config.adminEmail || email === config.adminEmailAlias;
+  let body = req.body || {};
+  if (typeof body === 'string') {
+    try {
+      body = JSON.parse(body || '{}');
+    } catch {
+      sendJson(res, 400, { message: 'Solicitud invalida' });
+      return;
+    }
+  }
+  const email = String(body.email || '').toLowerCase().trim();
+  const password = String(body.password || '').trim();
+  const validEmail = config.adminEmails.includes(email);
   const validPassword = password === config.adminPassword;
 
   if (!validEmail || !validPassword) {
-    sendJson(res, 401, { message: 'Credenciales invalidas' });
+    sendJson(res, 401, { message: 'Credenciales invalidas. Revisa usuario/correo y contrasena.' });
     return;
   }
 

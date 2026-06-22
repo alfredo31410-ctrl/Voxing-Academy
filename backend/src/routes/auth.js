@@ -7,13 +7,13 @@ export const authRouter = express.Router();
 
 authRouter.post('/login', async (req, res) => {
   const email = String(req.body.email || '').toLowerCase().trim();
-  const password = String(req.body.password || '');
-  const validEmail = email === config.adminEmail || email === config.adminEmailAlias;
+  const password = String(req.body.password || '').trim();
+  const validEmail = config.adminEmails.includes(email);
   const hash = await bcrypt.hash(config.adminPassword, 10);
   const validPassword = await bcrypt.compare(password, hash);
 
   if (!validEmail || !validPassword) {
-    return res.status(401).json({ message: 'Credenciales inválidas' });
+    return res.status(401).json({ message: 'Credenciales invalidas. Revisa usuario/correo y contrasena.' });
   }
 
   const token = jwt.sign({ email: config.adminEmail, role: 'admin' }, config.jwtSecret, { expiresIn: '8h' });
