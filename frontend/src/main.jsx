@@ -23,13 +23,11 @@ import {
   X
 } from 'lucide-react';
 import { initialCourses, learningPath } from './data/courses';
+import FreeClassLanding from './landing/FreeClassLanding';
 import './styles.css';
 
 const API_URL = '/api';
-const WHATSAPP_URL = import.meta.env.VITE_WHATSAPP_URL || '';
-const leadHref = WHATSAPP_URL || '#clase-gratis';
-const leadTarget = WHATSAPP_URL ? '_blank' : undefined;
-const leadRel = WHATSAPP_URL ? 'noreferrer' : undefined;
+const leadHref = '/clase-gratis';
 
 function formatApiError(error, fallback = 'No se pudo conectar con el servidor.') {
   if (error instanceof TypeError) {
@@ -91,29 +89,35 @@ const faqs = [
 ];
 
 function App() {
-  const [adminMode, setAdminMode] = useState(window.location.pathname.startsWith('/admin'));
+  const [routePath, setRoutePath] = useState(window.location.pathname);
   const [menuOpen, setMenuOpen] = useState(false);
+  const adminMode = routePath.startsWith('/admin');
+  const landingMode = routePath.startsWith('/clase-gratis');
 
   useEffect(() => {
-    const onPop = () => setAdminMode(window.location.pathname.startsWith('/admin'));
+    const onPop = () => setRoutePath(window.location.pathname);
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
   }, []);
 
   const goAdmin = () => {
     window.history.pushState({}, '', '/admin');
-    setAdminMode(true);
+    setRoutePath('/admin');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const goHome = () => {
     window.history.pushState({}, '', '/');
-    setAdminMode(false);
+    setRoutePath('/');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   if (adminMode) {
     return <AdminPanel onGoHome={goHome} />;
+  }
+
+  if (landingMode) {
+    return <FreeClassLanding onGoHome={goHome} />;
   }
 
   return (
@@ -185,7 +189,7 @@ function Hero() {
           micro-lecciones, retos y una ruta para avanzar sin pena.
         </p>
         <div className="hero-actions">
-          <a className="primary-button large" href={leadHref} target={leadTarget} rel={leadRel}>
+          <a className="primary-button large" href={leadHref}>
             Agendar clase gratis
             <ArrowRight size={18} />
           </a>
@@ -292,7 +296,7 @@ function FreeClass() {
             quieres hablar inglés con más seguridad.
           </p>
           <div className="free-class-actions">
-            <a className="primary-button large" href={leadHref} target={leadTarget} rel={leadRel}>
+            <a className="primary-button large" href={leadHref}>
               Quiero mi clase gratis
               <MessageCircle size={18} />
             </a>
@@ -473,7 +477,7 @@ function Contact() {
           ¿Qué quieres lograr con tu inglés?
           <textarea placeholder="Quiero aprender inglés para..." />
         </label>
-        <a className="primary-button large" href={leadHref} target={leadTarget} rel={leadRel}>
+        <a className="primary-button large" href={leadHref}>
           Solicitar informes
           <MessageCircle size={18} />
         </a>
