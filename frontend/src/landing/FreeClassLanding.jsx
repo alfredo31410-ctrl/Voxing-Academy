@@ -6,8 +6,8 @@ import {
   MessageCircle,
   Mic,
   ShieldCheck,
-  Sparkles,
-  UserPlus
+  UserPlus,
+  X
 } from 'lucide-react';
 
 const ACTIVE_CAMPAIGN_FORM_ID = '255';
@@ -80,24 +80,23 @@ export default function FreeClassLanding({ onGoHome }) {
         </aside>
       </section>
 
-      <section className={formOpen ? 'landing-form-area is-open' : 'landing-form-area'} id="registro-gratis">
-        <div className="landing-form-copy">
-          <p className="landing-kicker">Registro</p>
-          <h2>Reserva tu acceso gratuito</h2>
-          <p>Deja tus datos y te contactaremos para coordinar tu clase inicial.</p>
-        </div>
-
-        {!formOpen ? (
-          <button className="secondary-button large landing-form-trigger" onClick={() => setFormOpen(true)}>
-            Abrir formulario
-            <Sparkles size={18} />
-          </button>
-        ) : (
-          <div className="activecampaign-panel">
-            <div className="_form_255"></div>
+      {formOpen && (
+        <div className="landing-form-overlay" role="dialog" aria-modal="true" aria-label="Registro clase gratis">
+          <div className="landing-form-modal">
+            <button className="icon-button landing-form-close" onClick={() => setFormOpen(false)} aria-label="Cerrar formulario">
+              <X size={20} />
+            </button>
+            <div className="landing-form-copy">
+              <p className="landing-kicker">Registro</p>
+              <h2>Reserva tu acceso gratuito</h2>
+              <p>Deja tus datos y te contactaremos para coordinar tu clase inicial.</p>
+            </div>
+            <div className="activecampaign-panel">
+              <div className="_form_255"></div>
+            </div>
           </div>
-        )}
-      </section>
+        </div>
+      )}
     </main>
   );
 }
