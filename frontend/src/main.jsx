@@ -69,6 +69,45 @@ const microLessons = [
 
 const wordBank = ['Hello', 'Please', 'Thanks', 'Help', 'Water', 'Work', 'Today', 'Good'];
 
+const ecosystemBenefits = [
+  'Ruta visible de 6 fases para no sentir que estudias sin rumbo.',
+  '12 cursos que conectan pronunciacion, listening, gramatica, conversacion y aplicacion real.',
+  'Speaking Lab semanal para practicar en vivo, resolver dudas y corregir pronunciacion.',
+  'Comunidad privada con retos, audios, frases y seguimiento para no abandonar.',
+  'Constancia por curso y certificado final al completar la ruta Voxing.',
+  'Puedes empezar con una clase gratis, tomar un curso suelto o avanzar con la membresia anual.'
+];
+
+const productLadder = [
+  {
+    step: 'Entrada',
+    title: 'Clase gratuita por tema',
+    detail: 'Captamos tu objetivo, revisamos tu nivel y te mostramos por donde empezar sin presion.',
+    price: 'Gratis'
+  },
+  {
+    step: 'Venta inmediata',
+    title: 'Curso suelto Voxing',
+    detail: 'Para resolver una necesidad puntual: pronunciacion, viaje, trabajo, gramatica o conversacion.',
+    price: '$497 MXN'
+  },
+  {
+    step: 'Ruta completa',
+    title: 'Voxing Plus anual',
+    detail: 'La membresia completa con 12 cursos, Speaking Lab, comunidad, actualizaciones y certificado final.',
+    price: '$3,487 MXN'
+  }
+];
+
+const membershipIncludes = [
+  '12 cursos ordenados de English Starter a Fluency Lab.',
+  'Speaking Lab semanal en vivo con role plays, dudas y correccion.',
+  'Actualizaciones durante el ano: retos, capsulas, frases y practica con IA.',
+  'Comunidad privada con avisos, audios, retos de 7 dias y motivacion.',
+  'Constancias por curso completado y certificado Voxing de Ingles Practico.',
+  'Bonos sugeridos: pack de frases esenciales y kit de practica de 30 dias.'
+];
+
 const faqs = [
   {
     q: '¿Necesito saber inglés para empezar?',
@@ -128,6 +167,7 @@ function App() {
         <BrandIntro />
         <MicroLearning />
         <FreeClass />
+        <ProductLadder />
         <Programs />
         <Methodology />
         <Benefits />
@@ -316,9 +356,33 @@ function FreeClass() {
   );
 }
 
-function Programs() {
-  const featured = initialCourses.slice(0, 6);
+function ProductLadder() {
+  return (
+    <section className="section ladder-section" aria-label="Estrategia de entrada Voxing">
+      <div className="section-heading">
+        <p className="section-kicker">Ecosistema Voxing</p>
+        <h2>Una ruta simple: clase gratis, curso suelto y membresia anual.</h2>
+        <p>
+          El ecosistema esta pensado para que una persona pueda entrar sin presion, resolver una necesidad puntual
+          y despues avanzar con una ruta completa de ingles practico.
+        </p>
+      </div>
+      <div className="ladder-grid">
+        {productLadder.map((item, index) => (
+          <article className="ladder-card" key={item.title}>
+            <span>{index + 1}</span>
+            <small>{item.step}</small>
+            <h3>{item.title}</h3>
+            <p>{item.detail}</p>
+            <strong>{item.price}</strong>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
 
+function Programs() {
   return (
     <section className="section" id="programas">
       <div className="section-heading">
@@ -336,6 +400,11 @@ function Programs() {
           <p>
             12 cursos, Speaking Lab semanal, comunidad privada, actualizaciones, constancias y certificado final.
           </p>
+          <div className="membership-list">
+            {membershipIncludes.slice(0, 3).map((item) => (
+              <span key={item}><Check size={15} /> {item}</span>
+            ))}
+          </div>
         </div>
         <div className="price-block">
           <span>Precio sugerido</span>
@@ -344,15 +413,43 @@ function Programs() {
         </div>
       </div>
 
-      <div className="course-grid">
-        {featured.map((course) => (
-          <article className="course-card" key={course.slug}>
-            <div className="course-icon">{iconFor(course.slug)}</div>
-            <span>{course.phase}</span>
-            <h3>{course.title}</h3>
-            <p>{course.transformation}</p>
-          </article>
+      <div className="membership-grid">
+        {membershipIncludes.slice(3).map((item) => (
+          <div className="membership-item" key={item}>
+            <Check size={16} />
+            <span>{item}</span>
+          </div>
         ))}
+      </div>
+
+      <div className="course-grid">
+        {initialCourses.map((course) => {
+          const category = categoryFor(course.slug);
+          return (
+            <article className="course-card" key={course.slug}>
+              <div className="course-topline">
+                <div className="course-icon">{iconFor(course.slug)}</div>
+                <div className="course-tags">
+                  <span>{course.phase}</span>
+                  <strong>{category}</strong>
+                </div>
+              </div>
+              <h3>{course.title}</h3>
+              <div className="course-fit">
+                <small>Ideal para</small>
+                <p>{course.audience}</p>
+              </div>
+              <div className="course-result">
+                <small>Transformacion</small>
+                <p>{course.transformation}</p>
+              </div>
+              <div className="course-meta">
+                <span>{course.price}</span>
+                <small>Curso suelto + Speaking Lab</small>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );
@@ -394,7 +491,7 @@ function Benefits() {
         <h2>Un sistema de aprendizaje amable, repetible y accionable.</h2>
       </div>
       <div className="benefit-grid">
-        {benefits.map((benefit) => (
+        {ecosystemBenefits.map((benefit) => (
           <div className="benefit-item" key={benefit}>
             <Star size={18} />
             <span>{benefit}</span>
@@ -701,6 +798,24 @@ function iconFor(slug) {
     'english-with-ai-tools': <Laptop size={22} />
   };
   return map[slug] || <Users size={22} />;
+}
+
+function categoryFor(slug) {
+  const map = {
+    'english-starter-desde-cero': 'Inicio',
+    'pronunciacion-y-listening-basico': 'Pronunciacion',
+    'gramatica-facil-para-hablar': 'Estructura',
+    'vocabulario-de-vida-diaria': 'Vida diaria',
+    'conversacion-con-confianza': 'Speaking',
+    'english-for-work': 'Trabajo',
+    'travel-english': 'Viajes',
+    'ingles-para-ninos-y-familias': 'Familia',
+    'writing-y-correos-en-ingles': 'Writing',
+    'preparacion-a1-a2': 'Nivel A1-A2',
+    'english-with-ai-tools': 'IA',
+    'fluency-lab-proyecto-final': 'Fluidez'
+  };
+  return map[slug] || 'Curso';
 }
 
 function labelFor(field) {
