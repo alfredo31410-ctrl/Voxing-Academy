@@ -26,7 +26,7 @@ import { initialCourses, learningPath } from './data/courses';
 import FreeClassLanding from './landing/FreeClassLanding';
 import './styles.css';
 
-const API_URL = '/api';
+const API_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
 const leadHref = '/clase-gratis';
 
 function formatApiError(error, fallback = 'No se pudo conectar con el servidor.') {
