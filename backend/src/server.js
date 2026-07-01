@@ -21,6 +21,7 @@ app.use(
     credentials: true
   })
 );
+
 app.use(express.json());
 
 app.get('/api/health', (_req, res) => {

@@ -1,14 +1,24 @@
 import jwt from 'jsonwebtoken';
-import { config } from './config.js';
 
 export function requireAuth(req, res, next) {
-  const header = req.headers.authorization || '';
-  const token = header.startsWith('Bearer ') ? header.slice(7) : '';
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'No autorizado' });
+  }
+
+  const token = authHeader.split(' ')[1];
 
   try {
-    req.user = jwt.verify(token, config.jwtSecret);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (decoded.role !== 'admin') {
+      return res.status(403).json({ message: 'Acceso denegado' });
+    }
+
+    req.user = decoded;
     next();
-  } catch {
-    res.status(401).json({ message: 'No autorizado' });
+  } catch (error) {
+    return res.status(401).json({ message: 'Token inválido o expirado' });
   }
 }
