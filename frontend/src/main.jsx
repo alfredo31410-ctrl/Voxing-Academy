@@ -26,11 +26,7 @@ import { initialCourses, learningPath } from './data/courses';
 import FreeClassLanding from './landing/FreeClassLanding';
 import './styles.css';
 
-const configuredApiUrl = import.meta.env.VITE_API_URL || '/api';
-const API_URL =
-  import.meta.env.PROD && /localhost|127\.0\.0\.1/.test(configuredApiUrl)
-    ? '/api'
-    : configuredApiUrl.replace(/\/$/, '');
+const API_URL = '/api';
 const leadHref = '/clase-gratis';
 
 function formatApiError(error, fallback = 'No se pudo conectar con el servidor.') {
@@ -134,9 +130,6 @@ const faqs = [
 function App() {
   const [routePath, setRoutePath] = useState(window.location.pathname);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [adminGateOpen, setAdminGateOpen] = useState(
-    window.location.pathname.startsWith('/admin') && !localStorage.getItem('voxing-token')
-  );
   const adminMode = routePath.startsWith('/admin');
   const landingMode = routePath.startsWith('/clase-gratis');
 
@@ -149,7 +142,6 @@ function App() {
   const goAdmin = () => {
     window.history.pushState({}, '', '/admin');
     setRoutePath('/admin');
-    setAdminGateOpen(!localStorage.getItem('voxing-token'));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -160,9 +152,6 @@ function App() {
   };
 
   if (adminMode) {
-    if (adminGateOpen) {
-      return <AdminGate onCancel={goHome} onSuccess={() => setAdminGateOpen(false)} />;
-    }
     return <AdminPanel onGoHome={goHome} />;
   }
 
@@ -188,52 +177,6 @@ function App() {
       </main>
       <Footer onAdmin={goAdmin} />
     </div>
-  );
-}
-
-function AdminGate({ onCancel, onSuccess }) {
-  const [email, setEmail] = useState('alfredo31410_db_user');
-  const [password, setPassword] = useState('');
-  const [status, setStatus] = useState('');
-
-  async function submit(event) {
-    event.preventDefault();
-    setStatus('Validando acceso...');
-    try {
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      if (!response.ok) throw new Error('Usuario o contrasena incorrectos.');
-      const data = await response.json();
-      localStorage.setItem('voxing-token', data.token);
-      onSuccess();
-    } catch (error) {
-      setStatus(formatApiError(error, 'No se pudo validar el acceso.'));
-    }
-  }
-
-  return (
-    <main className="admin-basic-shell">
-      <form className="admin-basic-dialog" onSubmit={submit} role="dialog" aria-modal="true" aria-label="Iniciar sesion admin">
-        <h1>Iniciar sesion</h1>
-        <p>{window.location.origin}</p>
-        <label>
-          Nombre de usuario
-          <input autoFocus value={email} onChange={(event) => setEmail(event.target.value)} />
-        </label>
-        <label>
-          Contrasena
-          <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
-        </label>
-        <div className="admin-basic-actions">
-          <button className="primary-button" type="submit">Iniciar sesion</button>
-          <button className="secondary-button" type="button" onClick={onCancel}>Cancelar</button>
-        </div>
-        <span>{status}</span>
-      </form>
-    </main>
   );
 }
 
