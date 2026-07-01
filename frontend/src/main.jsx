@@ -38,15 +38,6 @@ function formatApiError(error, fallback = 'No se pudo conectar con el servidor.'
   return error.message || fallback;
 }
 
-const benefits = [
-  'Aprendes con frases reales, no con listas interminables.',
-  'Practicas desde el primer día aunque empieces desde cero.',
-  'Tienes ruta, comunidad y acompañamiento para no abandonar.',
-  'Conectas pronunciación, listening, gramática y conversación.',
-  'Puedes avanzar por cursos sueltos o por la membresía completa.',
-  'Usas contenido corto, retos y micro-lecciones para practicar diario.'
-];
-
 const microLessons = [
   {
     tag: 'Frase base',
