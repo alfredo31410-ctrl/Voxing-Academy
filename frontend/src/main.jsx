@@ -24,7 +24,6 @@ import {
 } from 'lucide-react';
 import { initialCourses, learningPath } from './data/courses';
 import FreeClassLanding from './landing/FreeClassLanding';
-import AdminAccessGate from './components/AdminAccessGate';
 import './styles.css';
 
 const API_URL = '/api';
@@ -143,13 +142,9 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  if (adminMode) {
-    return (
-      <AdminAccessGate>
-        <AdminPanel onGoHome={goHome} />
-      </AdminAccessGate>
-    );
-  }
+ if (adminMode) {
+  return <AdminPanel onGoHome={goHome} />;
+}
 
   if (landingMode) {
     return <FreeClassLanding onGoHome={goHome} />;
