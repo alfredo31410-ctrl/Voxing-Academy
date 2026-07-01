@@ -585,7 +585,7 @@ function Footer({ onAdmin }) {
 }
 
 function AdminPanel({ onGoHome }) {
-  const [token, setToken] = useState(localStorage.getItem('voxing-token') || '');
+ const [token, setToken] = useState(sessionStorage.getItem('voxing-token') || '');
   const [email, setEmail] = useState('alfredo31410_db_user');
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState('');
@@ -601,12 +601,27 @@ function AdminPanel({ onGoHome }) {
     format: '4 a 6 horas de contenido grabado + sesión en vivo',
     featured: false
   }), []);
+useEffect(() => {
+  if (!token) return;
 
-  useEffect(() => {
-    if (token) {
-      fetchCourses(token).then(setCourses).catch((error) => setStatus(formatApiError(error, 'No se pudieron cargar cursos.')));
-    }
-  }, [token]);
+  fetchCourses(token)
+    .then(setCourses)
+    .catch((error) => {
+      if (error.message === 'SESSION_EXPIRED') {
+        sessionStorage.removeItem('voxing-token');
+        setToken('');
+        setStatus('Tu sesión expiró. Inicia sesión nuevamente.');
+        return;
+      }
+
+      setStatus(
+        formatApiError(
+          error,
+          'No se pudieron cargar cursos.'
+        )
+      );
+    });
+}, [token]);
 
   async function login(event) {
     event.preventDefault();
@@ -619,7 +634,7 @@ function AdminPanel({ onGoHome }) {
       });
       if (!response.ok) throw new Error('Credenciales inválidas.');
       const data = await response.json();
-      localStorage.setItem('voxing-token', data.token);
+      sessionStorage.setItem('voxing-token', data.token);
       setToken(data.token);
       setStatus('Acceso validado correctamente.');
     } catch (error) {
@@ -705,7 +720,7 @@ function AdminPanel({ onGoHome }) {
         <button
           className="text-button"
           onClick={() => {
-            localStorage.removeItem('voxing-token');
+            sessionStorage.removeItem('voxing-token');
             setToken('');
           }}
         >
@@ -771,12 +786,23 @@ function AdminPanel({ onGoHome }) {
 
 async function fetchCourses(token) {
   const response = await fetch(`${API_URL}/courses`, {
-    headers: token ? { Authorization: `Bearer ${token}` } : {}
+    headers: token
+      ? {
+          Authorization: `Bearer ${token}`
+        }
+      : {}
   });
-  if (!response.ok) throw new Error('No se pudieron cargar cursos');
+
+  if (response.status === 401) {
+    throw new Error('SESSION_EXPIRED');
+  }
+
+  if (!response.ok) {
+    throw new Error('No se pudieron cargar cursos');
+  }
+
   return response.json();
 }
-
 function iconFor(slug) {
   const map = {
     'english-starter-desde-cero': <BookOpenCheck size={22} />,
